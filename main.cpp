@@ -21,15 +21,19 @@ public:
         }
     }
 
+#include <iomanip>  // для setw
+
     void TO_SHOW(bool isSearch = false, string data = "", string comparisonType = "") {
         const int memWidth = 15;
-        const int patWidth = 15;
-        const int compWidth = 15;
-        const int iterWidth = 8;
+        const int patWidth = 15;  
+        const int compWidth = 15;  
+        const int iterWidth = 8;   
+        const int matchWidth = 15; 
 
         if (isSearch) {
-            int totalWidth = 1 + memWidth + 1 + patWidth + 1 + compWidth + (memory.size()) * (1 + iterWidth) + 1;
-
+            int totalWidth = 1 + memWidth + 1 + patWidth + 1 + compWidth
+                + memory.size() * (iterWidth + 1)
+                + matchWidth + 1;
             cout << string(totalWidth, '-') << "\n";
             cout << "|" << setw(memWidth) << left << "Memory"
                 << "|" << setw(patWidth) << left << "Pattern"
@@ -38,12 +42,12 @@ public:
                 string header = "Iter " + to_string(i + 1);
                 cout << "|" << setw(iterWidth) << left << header;
             }
-            cout << "|\n";
+            cout << "|" << setw(matchWidth) << left << "Matched" << "|\n";
             cout << string(totalWidth, '-') << "\n";
 
             for (size_t row = 0; row < memory.size(); row++) {
                 cout << "|" << setw(memWidth) << left << memory[row];
-                if (row == 0) { 
+                if (row == 0) {
                     cout << "|" << setw(patWidth) << left << data
                         << "|" << setw(compWidth) << left << comparisonType;
                 }
@@ -53,12 +57,18 @@ public:
                 }
                 for (size_t col = 0; col < memory.size(); col++) {
                     string result = "";
-                    if (col == row && col < found.size()) {
+                    if (col < row)
+                        result = "+";
+                    else if (col == row && col < found.size())
                         result = found[col];
-                    }
+                    else
+                        result = "";
                     cout << "|" << setw(iterWidth) << left << result;
                 }
-                cout << "|\n";
+                string matched = "No";
+                if (row < found.size() && found[row] == "+")
+                    matched = "Yes";
+                cout << "|" << setw(matchWidth) << left << matched << "|\n";
             }
             cout << string(totalWidth, '-') << "\n";
         }
