@@ -21,8 +21,6 @@ public:
         }
     }
 
-#include <iomanip>  // для setw
-
     void TO_SHOW(bool isSearch = false, string data = "", string comparisonType = "") {
         const int memWidth = 15;
         const int patWidth = 15;  
